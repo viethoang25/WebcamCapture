@@ -22,5 +22,7 @@
 	<classpathentry kind="lib" path="D:/Java/javacv-bin/opencv.jar"/>
 	<classpathentry kind="lib" path="D:/Java/javacv-bin/opencv-windows-x86.jar"/>
 	<classpathentry kind="lib" path="D:/Java/javacv-bin/opencv-windows-x86_64.jar"/>
+	<classpathentry kind="lib" path="lib/box-java-sdk-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/minimal-json-0.9.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

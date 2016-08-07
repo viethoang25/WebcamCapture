@@ -1,18 +1,26 @@
+package capture;
 import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.bytedeco.javacpp.opencv_core.IplImage;
 
+import com.box.sdk.BoxFolder;
+
+import utilities.DateUtils;
+import utilities.SessionUtils;
+import api.BoxApi;
+import config.Constants;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 
 public class CaptureImage extends TimerTask {
 
-	private static final String IMAGE_FOLDER = "./image/";
+	private static final String IMAGE_FOLDER = Constants.IMAGE_FOLDER;
 	final String OUTPUT_FILE = "PNG";
-	final int SECONDS = 5;
+	
 	
 	IplImage image;
 	
@@ -27,8 +35,10 @@ public class CaptureImage extends TimerTask {
 	@Override
 	public void run() {
 		try {
-			cvSaveImage(imageFileName(), image);
-			Thread.sleep(SECONDS * 1000);
+			String name = imageFileName();
+			cvSaveImage(name, image);
+			uploadToBox(name);
+			Thread.sleep(Constants.TIME_DELAY * 1000);
 		} catch (Exception e) {
 		}
 	}
@@ -61,5 +71,18 @@ public class CaptureImage extends TimerTask {
                 break;
         }
         return number;
+    }
+    
+    private void uploadToBox(String name) {
+    	BoxApi api = BoxApi.getInstance();
+		BoxFolder.Info folderInfo = api.createFolder(api.getBoxFolder(SessionUtils.unitFolderId), DateUtils.getCurrentDate());
+		SessionUtils.dateFolderId = folderInfo.getID();
+		folderInfo = api.createFolder(api.getBoxFolder(SessionUtils.dateFolderId), DateUtils.getCurrentTime());
+		SessionUtils.timeFolderId = folderInfo.getID();
+		try {
+			api.uploadFile(api.getBoxFolder(SessionUtils.timeFolderId), name);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

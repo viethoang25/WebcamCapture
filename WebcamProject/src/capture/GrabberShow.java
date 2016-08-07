@@ -1,8 +1,10 @@
+package capture;
 import java.util.Timer;
 
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.*;
 
+import config.Constants;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.*;
@@ -22,8 +24,6 @@ public class GrabberShow implements Runnable {
     public void run() {
         FrameGrabber grabber = new VideoInputFrameGrabber(0);
         OpenCVFrameConverter.ToIplImage converter = new OpenCVFrameConverter.ToIplImage();
-        AndroidFrameConverter converterToBitmap = new AndroidFrameConverter();
-        int i=0;
         try {
             grabber.start();
             IplImage img;
